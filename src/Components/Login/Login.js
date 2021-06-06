@@ -2,18 +2,33 @@ import React, { useState,useContext } from 'react';
 import {FirebaseContext} from '../../store/firebaseContext'
 import Logo from '../../olx-logo.png';
 import './Login.css';
+import {useHistory} from 'react-router-dom'
 
 function Login() {
   const [email, setemail] = useState('')
   const [password, setpassword] = useState('')
   const {firebase} = useContext(FirebaseContext)
+  const history = useHistory()
   const handleLogin = (e)=>{
     e.preventDefault()
-    firebase.auth().signInWithEmailAndPassword(email,password).then(()=>{
-      alert('Loogged In')
-    }).catch((err)=>{
-      alert(err.message)
-    })
+    // firebase.auth().signInWithEmailAndPassword(email,password).then((userCredentials)=>{
+    //   console.log(userCredentials);
+    //   history.push('/')
+    // }).catch((err)=>{
+    //   alert(err.message)
+    // })
+    firebase.auth().signInWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    // Signed in
+    var user = userCredential.user;
+    history.push('/')
+    // ...
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    alert(errorMessage)
+  });
   }
 
   return (
